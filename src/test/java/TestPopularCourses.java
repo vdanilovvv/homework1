@@ -11,7 +11,7 @@ public class TestPopularCourses extends BaseTest {
     }
 
     @Test
-    public void testClickLateCourse(){
+    public void testClickLateCourse() {
         new MainComponent(driver)
                 .clickLateCourse();
     }

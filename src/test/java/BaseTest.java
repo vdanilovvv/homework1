@@ -31,8 +31,6 @@ public class BaseTest {
         driver.get(URL);
 
         BaseComponent bs = new BaseComponent(driver);
-        bs.closeDiscount(driver);
-        bs.acceptCookies(driver);
         PageFactory.initElements(driver, this);
 
 

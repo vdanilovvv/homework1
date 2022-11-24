@@ -1,6 +1,8 @@
 package components;
 
 import org.apache.commons.collections4.ListUtils;
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -28,14 +30,27 @@ public class MainComponent extends BaseComponent {
     @FindBy(css = "div[class='lessons__new-item-courses']+div")
     public static List<WebElement> specificCoursesDates;
 
+    public static WebElement clickCourceDate(WebElement webElement) {
+        return webElement
+                .findElement(By.xpath(".."))
+                .findElement(By.xpath(".."))
+                .findElement(By.xpath(".."));
+    }
 
-    public CoursePage clickPopularCourseByName(String name){
+
+    public CoursePage clickPopularCourseByName(String name) {
         WebElement course = coursesNames.stream()
                 .filter((webElement) -> webElement.getText().contains(name))
                 .findAny()
                 .orElseThrow(() -> new RuntimeException("Incorrect Name"));
 
-        System.out.println(course.getText() + "ИМЯ");
+        Actions actions = new Actions(driver);
+
+        actions
+                .sendKeys(Keys.END)
+                .moveToElement(course)
+                .build()
+                .perform();
         course.click();
         return new CoursePage(driver);
     }
@@ -44,40 +59,39 @@ public class MainComponent extends BaseComponent {
     public CoursePage clickEarlyCourse() {
         List<WebElement> list = ListUtils.union(popularCoursesDates, specificCoursesDates);
         WebElement course = list.stream()
-                .peek(webElement -> System.out.println(getDate(webElement.getText(),true)))
                 .reduce((webElement, webElement2) ->
                         getDate(webElement.getText(), true) < getDate(webElement2.getText(), true) ?
                                 webElement : webElement2)
                 .orElseThrow(() -> new RuntimeException("Incorrect Date"));
 
-        System.out.println(course.getText() + "СТАРОЕ");
         Actions actions = new Actions(driver);
         actions
-                .moveToElement(course)
-                .click()
+                .sendKeys(Keys.END)
+                .moveToElement(clickCourceDate(course))
                 .build()
                 .perform();
+        clickCourceDate(course).click();
+
         return new CoursePage(driver);
     }
 
     public CoursePage clickLateCourse() {
         List<WebElement> list = ListUtils.union(popularCoursesDates, specificCoursesDates);
         WebElement course = list.stream()
-                .peek(webElement -> System.out.println(getDate(webElement.getText(),false)))
                 .reduce((webElement, webElement2) ->
                         getDate(webElement.getText(), false) > getDate(webElement2.getText(), false) ?
                                 webElement : webElement2)
                 .orElseThrow(() -> new RuntimeException("Incorrect Date"));
-        System.out.println(course.getText() + "НОВОЕ");
-        course.click();
-        //        Actions actions = new Actions(driver);
-//        actions
-//                .moveToElement(course)
-//                .click()
-//                .build()
-//                .perform();
-        return new CoursePage(driver);
 
+        Actions actions = new Actions(driver);
+        actions
+                .sendKeys(Keys.END)
+                .moveToElement(clickCourceDate(course))
+                .build()
+                .perform();
+        clickCourceDate(course).click();
+
+        return new CoursePage(driver);
     }
 
     public static Long getDate(String stringDate, boolean needMin) {
@@ -134,10 +148,14 @@ public class MainComponent extends BaseComponent {
         }
         int dayInt = Integer.parseInt(day);
         date.setDate(dayInt);
-        Date currentDate = new Date();
-        if (date.getTime() < currentDate.getTime()) {
-            date.setYear(date.getYear() + 1);
+
+        matcher = Pattern.compile("\\d+\\s+(года)").matcher(stringDate);
+        String yearString = matcher.find() ? matcher.group() : "";
+        if (!yearString.equals("")) {
+            int year = Integer.parseInt(yearString.replaceAll("\\D+", ""));
+            date.setYear(year);
         }
+
         return date.getTime();
     }
 

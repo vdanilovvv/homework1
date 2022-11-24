@@ -1,8 +1,0 @@
-pages\BasePage.class
-driver\DriverFactory.class
-components\MainComponent.class
-components\CourseComponent.class
-driver\DriverOverride.class
-components\BaseComponent.class
-pages\CoursePage.class
-pages\MainPage.class
