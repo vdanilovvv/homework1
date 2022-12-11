@@ -12,6 +12,11 @@
         <maven.compiler.source>15</maven.compiler.source>
         <maven.compiler.target>15</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <browser>chrome</browser>
+        <os>windows</os>
+        <base.url>https://otus.ru</base.url>
+        <courseName>Специализация iOS Developer</courseName>
+
     </properties>
 
     <dependencies>
@@ -25,7 +30,7 @@
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
-            <version>4.0.0-rc-3</version>
+            <version>3.141.59</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/com.opera/operadriver -->
         <dependency>
@@ -69,6 +74,13 @@
             <artifactId>commons-collections4</artifactId>
             <version>4.4</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.codehaus.mojo/properties-maven-plugin -->
+        <dependency>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>properties-maven-plugin</artifactId>
+            <version>1.1.0</version>
+        </dependency>
+
 
     </dependencies>
 
@@ -76,14 +88,55 @@
         <plugins>
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.19.1</version>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.junit.platform</groupId>
-                        <artifactId>junit-platform-surefire-provider</artifactId>
-                        <version>1.1.0</version>
-                    </dependency>
-                </dependencies>
+                <version>2.22.2</version>
+                <groupId>org.apache.maven.plugins</groupId>
+                <configuration>
+                    <systemPropertyVariables>
+                        <browser>${browser}</browser>
+                        <base.url>${base.url}</base.url>
+                        <courseName>${courseName}</courseName>
+                        <os>${os}</os>
+                    </systemPropertyVariables>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
+                    <includeTestSourceDirectory>true</includeTestSourceDirectory>
+                    <configLocation>${project.build.sourceDirectory}/../resources/checkstyle.xml</configLocation>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>analyze-compile</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>com.github.spotbugs</groupId>
+                <artifactId>spotbugs-maven-plugin</artifactId>
+                <version>4.7.3.0</version>
+                <configuration>
+                    <effort>Max</effort>
+                    <threshold>Low</threshold>
+                    <xmlOutput>true</xmlOutput>
+                    <includeTests>true</includeTests>
+                    <omitVisitors>UnreadFields</omitVisitors>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>analyze-compile</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

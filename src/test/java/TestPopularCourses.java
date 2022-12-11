@@ -1,25 +1,41 @@
+import annotations.Driver;
 import components.MainComponent;
+import extensions.SeleniumExtension;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.openqa.selenium.WebDriver;
+import pages.MainPage;
 
-public class TestPopularCourses extends BaseTest {
+@ExtendWith(SeleniumExtension.class)
+public class TestPopularCourses {
 
-    @Test
-    public void testClickEarlyCourse() {
-        new MainComponent(driver)
-                .clickEarlyCourse();
+  @Driver
+  private WebDriver driver;
 
-    }
+  @Test
+  public void testClickEarlyCourse() {
+    new MainPage(driver).open();
 
-    @Test
-    public void testClickLateCourse() {
-        new MainComponent(driver)
-                .clickLateCourse();
-    }
+    new MainComponent(driver)
+        .clickEarlyLateCourse(true)
+        .isCoursePage();
+  }
 
-    @Test
-    public void testClickCourseName() {
-        String name = prop.getProperty("courseName");
-        new MainComponent(driver)
-                .clickPopularCourseByName(name);
-    }
+  @Test
+  public void testClickLateCourse() {
+    new MainPage(driver).open();
+
+    new MainComponent(driver)
+        .clickEarlyLateCourse(false)
+        .isCoursePage();
+  }
+
+  @Test
+  public void testClickCourseName() {
+    new MainPage(driver).open();
+
+    new MainComponent(driver)
+        .clickPopularCourseByName(System.getProperty("courseName"))
+        .isCoursePage();
+  }
 }
