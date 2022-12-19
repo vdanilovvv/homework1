@@ -1,5 +1,6 @@
-package components;
+package com.otus.components;
 
+import com.otus.diconfig.GuiceScoped;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -8,8 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CourseComponent extends BaseComponent {
-  public CourseComponent(WebDriver driver) {
-    super(driver);
+  public CourseComponent(GuiceScoped guiceScoped) {
+    super(guiceScoped);
   }
 
   @FindBy(css = "h1[class='course-header2__title']")

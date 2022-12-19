@@ -1,4 +1,4 @@
-package driver;
+package com.otus.driver;
 
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.events.WebDriverEventListener;

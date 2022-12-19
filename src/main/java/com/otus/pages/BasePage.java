@@ -1,13 +1,16 @@
-package pages;
+package com.otus.pages;
 
+import com.otus.diconfig.GuiceScoped;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.PageFactory;
 
 public abstract class BasePage {
   protected WebDriver driver;
+  protected GuiceScoped guiceScoped;
 
-  public BasePage(WebDriver driver) {
-    this.driver = driver;
+  public BasePage(GuiceScoped guiceScoped) {
+    this.guiceScoped = guiceScoped;
+    this.driver = guiceScoped.driver;
     PageFactory.initElements(driver, this);
   }
 

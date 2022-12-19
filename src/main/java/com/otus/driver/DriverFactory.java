@@ -1,4 +1,4 @@
-package driver;
+package com.otus.driver;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -26,13 +26,13 @@ public class DriverFactory {
         String os = System.getProperty("os").toLowerCase(Locale.ROOT);
         switch (os) {
           case "windows":
-            System.setProperty("webdriver.opera.driver", "src/test/resources/operadriver_windows.exe");
+            System.setProperty("webdriver.opera.com.otus.driver", "src/test/resources/operadriver_windows.exe");
             break;
           case "linux":
-            System.setProperty("webdriver.opera.driver", "src/test/resources/operadriver_linux");
+            System.setProperty("webdriver.opera.com.otus.driver", "src/test/resources/operadriver_linux");
             break;
           case "mac":
-            System.setProperty("webdriver.opera.driver", "src/test/resources/operadriver_mac");
+            System.setProperty("webdriver.opera.com.otus.driver", "src/test/resources/operadriver_mac");
             break;
           default:
             throw new RuntimeException("Incorrect OS name");

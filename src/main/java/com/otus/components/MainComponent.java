@@ -1,5 +1,7 @@
-package components;
+package com.otus.components;
 
+import com.google.inject.Inject;
+import com.otus.diconfig.GuiceScoped;
 import org.apache.commons.collections4.ListUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -7,7 +9,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
-import pages.CoursePage;
+import com.otus.pages.CoursePage;
 
 import java.time.LocalDateTime;
 import java.time.Month;
@@ -19,8 +21,9 @@ import java.util.regex.Pattern;
 
 public class MainComponent extends BaseComponent {
 
-  public MainComponent(WebDriver driver) {
-    super(driver);
+  @Inject
+  public MainComponent(GuiceScoped guiceScoped) {
+    super(guiceScoped);
   }
 
   @FindBy(css = "div[class^='lessons__new-item-title']")
@@ -38,7 +41,7 @@ public class MainComponent extends BaseComponent {
   }
 
 
-  public CoursePage clickPopularCourseByName(String name) {
+  public void clickPopularCourseByName(String name) {
     WebElement course = coursesNames.stream()
         .filter((webElement) -> webElement.getText().contains(name))
         .findAny()
@@ -52,7 +55,6 @@ public class MainComponent extends BaseComponent {
         .build()
         .perform();
     course.click();
-    return new CoursePage(driver);
   }
 
   public WebElement sortCources(WebElement webElement, WebElement webElement2, boolean isEarly) {
@@ -65,7 +67,7 @@ public class MainComponent extends BaseComponent {
     }
   }
 
-  public CoursePage clickEarlyLateCourse(Boolean isEarly) {
+  public void clickEarlyLateCourse(Boolean isEarly) {
     List<WebElement> list = ListUtils.union(popularCoursesDates, specificCoursesDates);
     WebElement course = list.stream()
         .reduce((webElement, webElement2) -> sortCources(webElement, webElement2, isEarly))
@@ -78,8 +80,6 @@ public class MainComponent extends BaseComponent {
         .build()
         .perform();
     clickCourceDate(course).click();
-
-    return new CoursePage(driver);
   }
 
   public static Long getDate(String stringDate, boolean needMin) {
